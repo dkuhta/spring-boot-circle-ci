@@ -7,8 +7,8 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: google/cloud-sdk:latest
       - image: circleci/openjdk:8-jdk
+#      - image: google/cloud-sdk:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -24,10 +24,15 @@ jobs:
     steps:
       - checkout
 
-
       - run:
           name: Setup gcloud
           command: |
+            # Add the Cloud SDK distribution URI as a package source
+            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            # Import the Google Cloud Platform public key
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+            # Update the package list and install the Cloud SDK
+            sudo apt-get update && sudo apt-get install google-cloud-sdk
             echo $GCP_CONFIG > ${HOME}/account-auth.json
             cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
