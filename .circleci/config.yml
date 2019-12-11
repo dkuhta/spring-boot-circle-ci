@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: google/cloud-sdk
+      - image: google/cloud-sdk:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -34,6 +34,8 @@ jobs:
       - run:
           name: Setup gcloud
           command: |
+            echo $GCP_CONFIG | base64 --decode -i > ${HOME}/account-auth.json
+            cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
