@@ -23,6 +23,16 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Setup gcloud
+          command: |
+            pwd
+            gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
+      #            gcloud config set project aispot-dev
+      #            gcloud --quiet config set container/cluster cluster-lighthouse
+      #            gcloud config set compute/zone us-central1-f
+      #            gcloud --quiet container clusters get-credentials cluster-lighthouse
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -36,16 +46,6 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-
-      - run:
-          name: Setup gcloud
-          command: |
-            pwd
-            gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
-#            gcloud config set project aispot-dev
-#            gcloud --quiet config set container/cluster cluster-lighthouse
-#            gcloud config set compute/zone us-central1-f
-#            gcloud --quiet container clusters get-credentials cluster-lighthouse
 
       # run tests!
       - run: mvn integration-test
