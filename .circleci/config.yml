@@ -24,12 +24,6 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
 
       - run:
           name: Setup gcloud
@@ -42,6 +36,12 @@ jobs:
           #            gcloud config set compute/zone us-central1-f
           #            gcloud --quiet container clusters get-credentials cluster-lighthouse
 
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run: mvn dependency:go-offline
 
@@ -51,4 +51,4 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn integration-test
+      - run: ./mvnw integration-test
