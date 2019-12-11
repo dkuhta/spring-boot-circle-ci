@@ -36,7 +36,7 @@ jobs:
           command: |
             echo $GCP_CONFIG > ${HOME}/account-auth.json
             cat ${HOME}/account-auth.json
-            gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
+            gcloud auth activate-service-account --key-file ${HOME}/auth.json
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
           #            gcloud config set compute/zone us-central1-f
