@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  Setup gcp-cli:
+  setup_gcp_cli:
     docker:
       - image: google/cloud-sdk
 
