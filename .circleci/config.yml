@@ -34,7 +34,7 @@ jobs:
       - run:
           name: Setup gcloud
           command: |
-            echo $GCP_CONFIG | base64 --decode -i > ${HOME}/account-auth.json
+            echo $GCP_CONFIG > ${HOME}/account-auth.json
             cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
           #            gcloud config set project aispot-dev
