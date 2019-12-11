@@ -4,11 +4,32 @@
 #
 version: 2
 jobs:
+  Setup gcp-cli:
+    docker:
+      - image: google/cloud-sdk
+
+    working_directory: ~/repo
+
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: ./
+
+      - run:
+          name: Setup gcloud
+          command: |
+            echo $CLIENT_SECRET | base64 --decode -i > ${HOME}/account-auth.json
+            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+            gcloud config set project aispot-dev
+            gcloud --quiet config set container/cluster cluster-lighthouse
+            gcloud config set compute/zone us-central1-f
+            gcloud --quiet container clusters get-credentials cluster-lighthouse
+
   build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: google/cloud-sdk:latest
+#      - image: google/cloud-sdk:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -31,16 +52,16 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run:
-          name: Setup gcloud
-          command: |
-            echo $GCP_CONFIG > ${HOME}/account-auth.json
-            cat ${HOME}/account-auth.json
-            gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
-          #            gcloud config set project aispot-dev
-          #            gcloud --quiet config set container/cluster cluster-lighthouse
-          #            gcloud config set compute/zone us-central1-f
-          #            gcloud --quiet container clusters get-credentials cluster-lighthouse
+#      - run:
+#          name: Setup gcloud
+#          command: |
+#            echo $GCP_CONFIG > ${HOME}/account-auth.json
+#            cat ${HOME}/account-auth.json
+#            gcloud auth activate-service-account --key-file ${HOME}/gcp/auth.json
+#          #            gcloud config set project aispot-dev
+#          #            gcloud --quiet config set container/cluster cluster-lighthouse
+#          #            gcloud config set compute/zone us-central1-f
+#          #            gcloud --quiet container clusters get-credentials cluster-lighthouse
 
 
       - run: mvn dependency:go-offline
