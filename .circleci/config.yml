@@ -2,9 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
+version: 2.1
 orbs:
   gcp-cli: circleci/gcp-cli@1.8.3
-version: 2.1
 workflows:
   install_and_configure_cli:
     jobs:
@@ -50,11 +50,11 @@ jobs:
 #      - run:
 #          name: Setup_gcloud
 #          command: |
-             Add the Cloud SDK distribution URI as a package source
+#             Add the Cloud SDK distribution URI as a package source
 #            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-             Import the Google Cloud Platform public key
+#             Import the Google Cloud Platform public key
 #            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-             Update the package list and install the Cloud SDK
+#             Update the package list and install the Cloud SDK
 #            sudo apt-get update && sudo apt-get install google-cloud-sdk
 #            echo $GCP_CONFIG > ${HOME}/account-auth.json
 #            cat ${HOME}/account-auth.json
