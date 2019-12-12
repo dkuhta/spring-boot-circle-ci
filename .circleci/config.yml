@@ -43,7 +43,7 @@ jobs:
           command: |
             echo $GCLOUD_CLIENT_KEY > ${HOME}/account-auth.json
             gcloud auth application-default login \
-                  --client-id-file=${HOME}/account-auth.json
+                  --client-id-file=${HOME}/account-auth.json -y
             gcloud config set project helical-study-261016
             apt install -y maven
             mvn clean install
