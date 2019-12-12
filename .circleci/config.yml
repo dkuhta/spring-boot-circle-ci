@@ -52,6 +52,7 @@ jobs:
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
+            gcloud auth list
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
           #            gcloud config set compute/zone us-central1-f
@@ -59,4 +60,4 @@ jobs:
 
       # run tests!
 
-      - run: ./mvnw integration-test
+#      - run: ./mvnw integration-test
