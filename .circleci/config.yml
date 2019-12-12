@@ -41,11 +41,11 @@ jobs:
       - run:
           name: Setup_gcloud
           command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
+            echo $GCLOUD_CLIENT_KEY > ${HOME}/account-auth.json
             gcloud auth application-default login \
                   --client-id-file=${HOME}/account-auth.json
             gcloud config set project helical-study-261016
-                     apt install -y maven
+            apt install -y maven
             mvn clean install
             gcloud info
           #            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
