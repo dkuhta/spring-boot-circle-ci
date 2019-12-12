@@ -48,6 +48,7 @@ jobs:
             # Update the package list and install the Cloud SDK
             sudo apt-get update && sudo apt-get install google-cloud-sdk
             echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
+            mkdirs ~/.config/gcloud
             touch ~/.config/gcloud/application_default_credentials.json
             echo $GOOGLE_APPLICATION_CREDENTIALS > ~/.config/gcloud/application_default_credentials.json
             cat ${HOME}/account-auth.json
