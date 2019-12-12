@@ -20,7 +20,6 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
-      GOOGLE_APPLICATION_CREDENTIALS: ${HOME}/account-auth.json
 
     steps:
       - checkout
@@ -49,8 +48,8 @@ jobs:
             # Update the package list and install the Cloud SDK
             sudo apt-get update && sudo apt-get install google-cloud-sdk
             echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
+            echo $GCLOUD_SERVICE_KEY > $HOME/.config/gcloud/application_default_credentials.json
             cat ${HOME}/account-auth.json
-#            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
