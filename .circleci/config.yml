@@ -2,7 +2,16 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+orbs:
+  gcp-cli: circleci/gcp-cli@1.8.3
+version: 2.1
+workflows:
+  install_and_configure_cli:
+    jobs:
+      - gcp-cli/install_and_initialize_cli:
+          context: myContext
+          executor: gcp-cli/default
+
 jobs:
   build:
     docker:
@@ -38,21 +47,21 @@ jobs:
 #            - ~/.m2
 #          key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - run:
-          name: Setup_gcloud
-          command: |
-            # Add the Cloud SDK distribution URI as a package source
-            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            # Import the Google Cloud Platform public key
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-            # Update the package list and install the Cloud SDK
-            sudo apt-get update && sudo apt-get install google-cloud-sdk
-            echo $GCP_CONFIG > ${HOME}/account-auth.json
-            cat ${HOME}/account-auth.json
-            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
-            gcloud config set project helical-study-261016
-            gcloud config set compute/zone europe-west1-b
-            mvn clean install
+#      - run:
+#          name: Setup_gcloud
+#          command: |
+             Add the Cloud SDK distribution URI as a package source
+#            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+             Import the Google Cloud Platform public key
+#            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+             Update the package list and install the Cloud SDK
+#            sudo apt-get update && sudo apt-get install google-cloud-sdk
+#            echo $GCP_CONFIG > ${HOME}/account-auth.json
+#            cat ${HOME}/account-auth.json
+#            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+#            gcloud config set project helical-study-261016
+#            gcloud config set compute/zone europe-west1-b
+#            mvn clean install
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
           #            gcloud config set compute/zone us-central1-f
