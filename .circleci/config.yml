@@ -48,8 +48,8 @@ jobs:
             touch ~/.config/gcloud/application_default_credentials.json
             echo $GOOGLE_APPLICATION_CREDENTIALS > ~/.config/gcloud/application_default_credentials.json
             cat ~/.config/gcloud/application_default_credentials.json
+            gcloud config set compute/zone europe-west1-b
 #            cat ${HOME}/account-auth.json
-#            gcloud config set compute/zone europe-west1-b
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
           #            gcloud config set compute/zone us-central1-f
@@ -58,7 +58,7 @@ jobs:
       # run tests!
 
       - run: apt install -y maven
-      - run: mvn clean install
+      - run: mvn clean install -X
 #      - run: ./mvnw integration-test
 
 
