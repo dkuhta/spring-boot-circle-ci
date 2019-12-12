@@ -41,8 +41,7 @@ jobs:
       - run:
           name: Setup_gcloud
           command: |
-            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
-            cat ${HOME}/account-auth.json
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
             gcloud info
