@@ -42,8 +42,60 @@ jobs:
       # run tests!
 
       - run: mvn clean install
+      - run: ls -la
 
 
+
+  deploy-dev:
+    docker:
+      - image: google/cloud-sdk
+
+    working_directory: ~/repo
+
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: ./
+
+      - run:
+          name: Setup gcloud
+          command: |
+            echo $CLIENT_SECRET | base64 --decode -i > ${HOME}/account-auth.json
+            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+            gcloud config set project helical-study-261016
+#            gcloud --quiet config set container/cluster cluster-lighthouse
+#            gcloud config set compute/zone us-central1-f
+#            gcloud --quiet container clusters get-credentials cluster-lighthouse
+
+      - run:
+          name: Build Docker
+          command: docker build -f atlas-rest/Dockerfile -t gcr.io/aispot-dev/atlas:$CIRCLE_SHA1 .
+
+      - run:
+          name: Tag Docker
+          command: docker tag gcr.io/aispot-dev/atlas:$CIRCLE_SHA1 gcr.io/aispot-dev/atlas:latest
+
+#      - run:
+#          name: Publish Open API
+#          command: gcloud endpoints services deploy atlas-rest/openapi.json
+#
+#      - run:
+#          name: Use new Open API verison for deployment
+#          command: sed -i -- "s/SERVICE_VERSION/$(gcloud endpoints configs list --service atlas-api.endpoints.aispot-dev.cloud.goog --limit=1 --format="value(CONFIG_ID.scope())")/" atlas-rest/deployment.yaml
+#
+#      - run:
+#          name: Push container
+#          command: gcloud docker -- push gcr.io/aispot-dev/atlas
+#
+#      - run:
+#          name: Prepare build config
+#          command: |
+#            sed -i -- "s/atlas:latest/atlas:$CIRCLE_SHA1/" atlas-rest/deployment.yaml
+#            sed -i -- "s/NUMBER_OF_REPLICAS/1/" atlas-rest/deployment.yaml
+#
+#      - run:
+#          name: Deploy to k8t
+#          command: kubectl apply -f atlas-rest/deployment.yaml
 
 
 #  - run:
