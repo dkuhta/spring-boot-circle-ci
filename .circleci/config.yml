@@ -25,11 +25,11 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "pom.xml" }}
+#            # fallback to using the latest cache if no exact match is found
+#            - v1-dependencies-
 
 #      - run: mvn dependency:go-offline
 
@@ -50,7 +50,7 @@ jobs:
             echo $GCP_CONFIG > ${HOME}/account-auth.json
             cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
-            gcloud config set project helical-study-261016
+#            gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
             mvn clean install
           #            gcloud config set project aispot-dev
