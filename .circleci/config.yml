@@ -48,8 +48,9 @@ jobs:
             # Update the package list and install the Cloud SDK
             sudo apt-get update && sudo apt-get install google-cloud-sdk
             echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
-            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
-            echo $GOOGLE_APPLICATION_CREDENTIALS
+            echo $GOOGLE_APPLICATION_CREDENTIALS > ~/.config/gcloud/application_default_credentials.json
+#            export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/account-auth.json
+#            echo $GOOGLE_APPLICATION_CREDENTIALS
             cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
             gcloud config set project helical-study-261016
