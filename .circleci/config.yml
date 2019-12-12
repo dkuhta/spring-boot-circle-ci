@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Setup_gcloud
           command: |
-            echo $GOOGLE_APPLICATION_CREDENTIALS > ${HOME}/application_default_credentials.json
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/application_default_credentials.json
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
 
