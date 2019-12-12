@@ -41,7 +41,6 @@ jobs:
       - run:
           name: Setup gcloud
           command: |
-            sudo apt-get update
             # Add the Cloud SDK distribution URI as a package source
             echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
             # Import the Google Cloud Platform public key
@@ -51,6 +50,8 @@ jobs:
             echo $GCP_CONFIG > ${HOME}/account-auth.json
             cat ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+            gcloud config set project helical-study-261016
+            gcloud config set compute/zone europe-west1-b
             mvn clean install
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
