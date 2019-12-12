@@ -55,6 +55,24 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>com.gkatzioura.maven.cloud</groupId>
+                <artifactId>google-storage-wagon</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
     </build>
+
+    <repositories>
+        <repository>
+            <id>my-repo-bucket-snapshot</id>
+            <url>gs://maven-artifactory/snapshot</url>
+        </repository>
+        <repository>
+            <id>my-repo-bucket-release</id>
+            <url>gs://maven-artifactory/release</url>
+        </repository>
+    </repositories>
 
 </project>
