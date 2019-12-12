@@ -45,6 +45,8 @@ jobs:
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
             gcloud info
+            apt install -y maven
+            mvn clean install
 
 #            echo $GCLOUD_SERVICE_KEY > ${HOME}/application_default_credentials.json
 #            echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
@@ -57,8 +59,8 @@ jobs:
 
       # run tests!
 
-      - run: apt install -y maven
-      - run: mvn clean install -X
+#      - run: apt install -y maven
+#      - run: mvn clean install -X
 #      - run: ./mvnw integration-test
 
 
