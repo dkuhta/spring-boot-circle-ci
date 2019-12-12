@@ -53,6 +53,7 @@ jobs:
             gcloud config set project helical-study-261016
             gcloud config set compute/zone europe-west1-b
             gcloud auth list
+            export GOOGLE_APPLICATION_CREDENTIALS = ${HOME}/account-auth.json
           #            gcloud config set project aispot-dev
           #            gcloud --quiet config set container/cluster cluster-lighthouse
           #            gcloud config set compute/zone us-central1-f
