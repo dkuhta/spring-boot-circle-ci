@@ -57,7 +57,7 @@ jobs:
 
       # run tests!
 
-      - run: apt install maven
+      - run: apt install -y maven
       - run: mvn clean install
 #      - run: ./mvnw integration-test
 
