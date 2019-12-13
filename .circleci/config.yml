@@ -2,6 +2,13 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy-dev
+
 version: 2.1
 jobs:
   build:
@@ -44,8 +51,6 @@ jobs:
       - run: mvn clean install
       - run: ls -la
 
-
-
   deploy-dev:
     docker:
       - image: google/cloud-sdk
@@ -69,11 +74,11 @@ jobs:
 
       - run:
           name: Build Docker
-          command: docker build -f atlas-rest/Dockerfile -t gcr.io/aispot-dev/atlas:$CIRCLE_SHA1 .
+          command: docker build -f Dockerfile -t gcr.io/sharebike-dev/test:$CIRCLE_SHA1 .
 
       - run:
           name: Tag Docker
-          command: docker tag gcr.io/aispot-dev/atlas:$CIRCLE_SHA1 gcr.io/aispot-dev/atlas:latest
+          command: docker tag gcr.io/sharebike-dev/test:$CIRCLE_SHA1 gcr.io/sharebike-dev/test:latest
 
 #      - run:
 #          name: Publish Open API
