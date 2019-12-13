@@ -74,7 +74,7 @@ jobs:
 
       - run:
           name: Build Docker
-          command: docker build -f Dockerfile -t gcr.io/sharebike-dev/test:$CIRCLE_SHA1 .
+          command: ls -la && docker build -f Dockerfile -t gcr.io/sharebike-dev/test:$CIRCLE_SHA1 .
 
       - run:
           name: Tag Docker
