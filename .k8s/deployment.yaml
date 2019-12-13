@@ -1,0 +1,110 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: sharebike-dev
+  labels:
+    name: microservice1-deployment
+  name: microservice1-deployment
+spec:
+  replicas: NUMBER_OF_REPLICAS
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        name: microservice1-deployment
+    spec:
+      containers:
+      - name: microservice1-deployment
+        image: gcr.io/helical-study-261016/test:latest
+        env:
+        - name: ATLAS_CACHE
+          value: "true"
+        - name: ATLAS_CONNECTION_POOL_MAX_WAIT
+          value: "1000"
+        - name: ATLAS_CONNECTION_POOL_MAX_ACTIVE
+          value: "10"
+        - name: ATLAS_SEARCH_SPOTS_MAP_THRESHOLD
+          value: "200"
+        - name: ATLAS_SEARCH_RULES_MAP_THRESHOLD
+          value: "200"
+        - name: GET_HOSTS_FROM
+          value: dns
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-secret
+              key: password
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-secret
+              key: username
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: global-properties
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: global-properties
+              key: REDIS_PORT
+        - name: GOOGLEAPIS_TRANSLATION_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: global-properties
+              key: GOOGLEAPIS_TRANSLATION_KEY
+        - name: SENTRY_DSN
+          valueFrom:
+            configMapKeyRef:
+              name: sentry-properties
+              key: SENTRY_ATLAS
+        - name: SPIDERS_DB_URI
+          valueFrom:
+            configMapKeyRef:
+              name: global-properties
+              key: SPIDERS_DB_URI
+        ports:
+         - containerPort: 8080
+        resources:
+#https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 50
+          periodSeconds: 50
+        readinessProbe:
+          httpGet:
+#            path: /readiness
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 50
+          periodSeconds: 50
+      volumes:
+        - name: cloudsql-secret
+          emptyDir:
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: microservice1-service
+  name: microservice1-service-public
+  namespace: sharebike-dev
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+  selector:
+    name: microservice1-deployment
