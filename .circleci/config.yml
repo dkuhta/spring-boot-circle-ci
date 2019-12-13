@@ -95,7 +95,7 @@ jobs:
 
       - run:
           name: Push container
-          command: docker -- push gcr.io/sharebike-dev/test
+          command: docker push gcr.io/sharebike-dev/test
 
       #      - run:
       #          name: Publish Open API
