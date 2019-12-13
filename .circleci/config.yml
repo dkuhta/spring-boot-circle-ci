@@ -50,7 +50,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
 
-      - run: pwd && ls -la
+      - run: cd target && ls -la
 
       - store_artifacts:
           path: target/*.jar
