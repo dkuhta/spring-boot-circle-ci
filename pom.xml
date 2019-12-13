@@ -40,12 +40,6 @@
             </exclusions>
         </dependency>
 
-        <!--<dependency>
-            <groupId>com.kuhta</groupId>
-            <artifactId>lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>-->
-
     </dependencies>
 
     <build>
@@ -55,24 +49,19 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <!--<extensions>
-            <extension>
-                <groupId>com.gkatzioura.maven.cloud</groupId>
-                <artifactId>google-storage-wagon</artifactId>
-                <version>1.0</version>
-            </extension>
-        </extensions>-->
     </build>
 
-    <!--<repositories>
+    <repositories>
         <repository>
-            <id>my-repo-bucket-snapshot</id>
-            <url>gs://maven-artifactory/snapshot</url>
+            <id>snapshots</id>
+            <name>bitnami-artifactory-66ee-snapshots</name>
+            <url>http://34.65.164.40/artifactory/libs-snapshot-local</url>
         </repository>
         <repository>
-            <id>my-repo-bucket-release</id>
-            <url>gs://maven-artifactory/release</url>
+            <id>central</id>
+            <name>bitnami-artifactory-66ee-releases</name>
+            <url>http://34.65.164.40/artifactory/libs-release-local</url>
         </repository>
-    </repositories>-->
+    </repositories>
 
 </project>
