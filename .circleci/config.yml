@@ -89,6 +89,8 @@ jobs:
           name: Tag Docker
           command: docker tag gcr.io/sharebike-dev/test:$CIRCLE_SHA1 gcr.io/sharebike-dev/test:latest
 
+      -run: docker --version
+
       - run:
           name: Push container
           command: gcloud docker -- push gcr.io/sharebike-dev/test
