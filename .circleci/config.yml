@@ -17,7 +17,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-#      - image: google/cloud-sdk
+      #      - image: google/cloud-sdk
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
 
-#       Download and cache dependencies
+      #       Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "pom.xml" }}
@@ -42,15 +42,21 @@ jobs:
 
       - run: mvn dependency:go-offline
 
+      - run: mvn clean install
+
       - save_cache:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
 
-      # run tests!
+      - store_artifacts:
+          path: target/*.jar
 
-      - run: mvn clean install
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./.
 
   deploy-dev:
     docker:
@@ -69,9 +75,9 @@ jobs:
             echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
             gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
             gcloud config set project helical-study-261016
-#            gcloud --quiet config set container/cluster cluster-lighthouse
-#            gcloud config set compute/zone us-central1-f
-#            gcloud --quiet container clusters get-credentials cluster-lighthouse
+      #            gcloud --quiet config set container/cluster cluster-lighthouse
+      #            gcloud config set compute/zone us-central1-f
+      #            gcloud --quiet container clusters get-credentials cluster-lighthouse
 
       - run:
           name: Build Docker
@@ -81,44 +87,44 @@ jobs:
           name: Tag Docker
           command: docker tag gcr.io/sharebike-dev/test:$CIRCLE_SHA1 gcr.io/sharebike-dev/test:latest
 
-#      - run:
-#          name: Publish Open API
-#          command: gcloud endpoints services deploy atlas-rest/openapi.json
-#
-#      - run:
-#          name: Use new Open API verison for deployment
-#          command: sed -i -- "s/SERVICE_VERSION/$(gcloud endpoints configs list --service atlas-api.endpoints.aispot-dev.cloud.goog --limit=1 --format="value(CONFIG_ID.scope())")/" atlas-rest/deployment.yaml
-#
-#      - run:
-#          name: Push container
-#          command: gcloud docker -- push gcr.io/aispot-dev/atlas
-#
-#      - run:
-#          name: Prepare build config
-#          command: |
-#            sed -i -- "s/atlas:latest/atlas:$CIRCLE_SHA1/" atlas-rest/deployment.yaml
-#            sed -i -- "s/NUMBER_OF_REPLICAS/1/" atlas-rest/deployment.yaml
-#
-#      - run:
-#          name: Deploy to k8t
-#          command: kubectl apply -f atlas-rest/deployment.yaml
+      #      - run:
+      #          name: Publish Open API
+      #          command: gcloud endpoints services deploy atlas-rest/openapi.json
+      #
+      #      - run:
+      #          name: Use new Open API verison for deployment
+      #          command: sed -i -- "s/SERVICE_VERSION/$(gcloud endpoints configs list --service atlas-api.endpoints.aispot-dev.cloud.goog --limit=1 --format="value(CONFIG_ID.scope())")/" atlas-rest/deployment.yaml
+      #
+      #      - run:
+      #          name: Push container
+      #          command: gcloud docker -- push gcr.io/aispot-dev/atlas
+      #
+      #      - run:
+      #          name: Prepare build config
+      #          command: |
+      #            sed -i -- "s/atlas:latest/atlas:$CIRCLE_SHA1/" atlas-rest/deployment.yaml
+      #            sed -i -- "s/NUMBER_OF_REPLICAS/1/" atlas-rest/deployment.yaml
+      #
+      #      - run:
+      #          name: Deploy to k8t
+      #          command: kubectl apply -f atlas-rest/deployment.yaml
 
 
-#  - run:
-#      name: Setup_gcloud
-#      command: |
-#         Add the Cloud SDK distribution URI as a package source
-#        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-#         Import the Google Cloud Platform public key
-#        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-#         Update the package list and install the Cloud SDK
-#        sudo apt-get update && sudo apt-get install google-cloud-sdk
-#        echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
-#        mkdir -p ~/.config/gcloud
-#        touch ~/.config/gcloud/application_default_credentials.json
-#        echo $GOOGLE_APPLICATION_CREDENTIALS > ~/.config/gcloud/application_default_credentials.json
-#        cat ~/.config/gcloud/application_default_credentials.json
-#        gcloud config set project helical-study-261016
+      #  - run:
+      #      name: Setup_gcloud
+      #      command: |
+      #         Add the Cloud SDK distribution URI as a package source
+      #        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+      #         Import the Google Cloud Platform public key
+      #        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+      #         Update the package list and install the Cloud SDK
+      #        sudo apt-get update && sudo apt-get install google-cloud-sdk
+      #        echo $GCLOUD_SERVICE_KEY > ${HOME}/account-auth.json
+      #        mkdir -p ~/.config/gcloud
+      #        touch ~/.config/gcloud/application_default_credentials.json
+      #        echo $GOOGLE_APPLICATION_CREDENTIALS > ~/.config/gcloud/application_default_credentials.json
+      #        cat ~/.config/gcloud/application_default_credentials.json
+      #        gcloud config set project helical-study-261016
       #            cat ${HOME}/account-auth.json
       #            gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
       #            gcloud config set compute/zone europe-west1-b
@@ -129,16 +135,16 @@ jobs:
 
 
 
-#  - run:
-#      name: Setup_gcloud
-#      command: |
-#        echo $GCLOUD_CLIENT_KEY > ${HOME}/account-auth.json
-#        gcloud -y auth application-default login \
-#              --client-id-file=${HOME}/account-auth.json
-#        gcloud config set project helical-study-261016
-#        apt install -y maven
-#        mvn clean install
-#        gcloud info
+      #  - run:
+      #      name: Setup_gcloud
+      #      command: |
+      #        echo $GCLOUD_CLIENT_KEY > ${HOME}/account-auth.json
+      #        gcloud -y auth application-default login \
+      #              --client-id-file=${HOME}/account-auth.json
+      #        gcloud config set project helical-study-261016
+      #        apt install -y maven
+      #        mvn clean install
+      #        gcloud info
       #            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
       #            gcloud config set compute/zone europe-west1-b
 
