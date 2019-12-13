@@ -90,8 +90,12 @@ jobs:
           command: docker tag gcr.io/sharebike-dev/test:$CIRCLE_SHA1 gcr.io/sharebike-dev/test:latest
 
       - run:
+          name: Docker auth
+          command: echo y | gcloud auth configure-docker
+
+      - run:
           name: Push container
-          command: yes | gcloud auth configure-docker && docker -- push gcr.io/sharebike-dev/test
+          command: docker -- push gcr.io/sharebike-dev/test
 
       #      - run:
       #          name: Publish Open API
