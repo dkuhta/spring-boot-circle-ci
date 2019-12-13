@@ -7,7 +7,9 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - deploy-dev
+      - deploy-dev:
+          requires:
+            - build
 
 version: 2.1
 jobs:
@@ -49,7 +51,6 @@ jobs:
       # run tests!
 
       - run: mvn clean install
-      - run: ls -la
 
   deploy-dev:
     docker:
