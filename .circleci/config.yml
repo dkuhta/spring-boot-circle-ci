@@ -40,6 +40,13 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - run:
+          name: Setup artifactory keys
+          command: |
+            mkdir -p ${HOME}/.m2 && touch ${HOME}/.m2/settings.xml
+            echo $REPO_SECRET > ${HOME}/.m2/settings.xml
+          when: always
+
       - run: mvn dependency:go-offline
 
       - run: mvn clean install
