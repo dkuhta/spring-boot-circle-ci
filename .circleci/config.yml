@@ -49,9 +49,6 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-
-      - run: cd target && ls -la
-
       - store_artifacts:
           path: target/circle-ci-0.0.1-SNAPSHOT.jar
 
@@ -83,14 +80,14 @@ jobs:
 
       - run:
           name: Build Docker
-          command: ls -la && docker build -f Dockerfile -t gcr.io/helical-study-261016/test:$CIRCLE_SHA1 .
+          command: docker build -f Dockerfile -t gcr.io/helical-study-261016/test:$CIRCLE_SHA1 .
 
       - run:
           name: Tag Docker
           command: docker tag gcr.io/helical-study-261016/test:$CIRCLE_SHA1 gcr.io/helical-study-261016/test:latest
 
       - run:
-          name: Docker auth
+          name: gcloud auth Docker
           command: echo y | gcloud auth configure-docker
 
       - run:
