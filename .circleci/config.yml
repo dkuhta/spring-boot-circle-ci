@@ -53,7 +53,7 @@ jobs:
       - run: cd target && ls -la
 
       - store_artifacts:
-          path: target/*.jar
+          path: target/circle-ci-0.0.1-SNAPSHOT.jar
 
       - persist_to_workspace:
           root: ./
